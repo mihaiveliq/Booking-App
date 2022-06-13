@@ -1,0 +1,37 @@
+_format_version: "2.1"
+
+services:
+  - name: chair_service
+    url: http://chair_service/api
+    routes:
+      - name: chair_service_route
+        paths: 
+          - /api/books
+          
+  - name: db-adminer
+    url: http://adminer:8080
+    routes:
+      - name: adminer-service
+        paths:
+          - /adminer
+
+consumers:
+  - username: customer
+
+plugins:
+  - name: key-auth
+    service: chair_service
+  
+  - name: acl
+    service: chair_service
+    config:
+      allow:
+        - customers
+
+keyauth_credentials:
+  - consumer: customer
+    key: guest
+
+acls:
+  - consumer: customer
+    group: customers
